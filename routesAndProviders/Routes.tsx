@@ -1,14 +1,14 @@
 import React, { useContext } from "react";
 import { AppStorage } from "./APIprovider";
 import Loading from "./../screens/Loading";
-import MainApp from "./../screens/MainApp";
+import AppTabs from "../navigation/AppTabs";
 
 interface RoutesProps {}
 
-const Routes: React.FC<RoutesProps> = ({}) => {
+const Routes: React.FC<RoutesProps> = () => {
   const { isAppLoading } = useContext(AppStorage);
 
-  return <>{isAppLoading ? <Loading /> : <MainApp />}</>;
+  return <>{isAppLoading ? <Loading /> : <AppTabs />}</>;
 };
 
 export default Routes;

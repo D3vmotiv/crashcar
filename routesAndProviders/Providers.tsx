@@ -4,7 +4,7 @@ import Routes from "./Routes";
 
 interface ProvidersProps {}
 
-export const Providers: React.FC<ProvidersProps> = ({}) => {
+export const Providers: React.FC<ProvidersProps> = () => {
   return (
     <APIprovider>
       <Routes />

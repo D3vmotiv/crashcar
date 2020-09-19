@@ -1,10 +1,10 @@
 import React, { useContext, useState } from "react";
 import { Button, Text, View } from "react-native";
-import { AppStorage } from "./../routesAndProviders/APIprovider";
+import { AppStorage } from "../routesAndProviders/APIprovider";
 
-interface mainAppProps {}
+interface ExploreProps {}
 
-const mainApp: React.FC<mainAppProps> = () => {
+const Explore: React.FC<ExploreProps> = () => {
   const { handleDataApi } = useContext(AppStorage);
 
   const [rendererAccidentsCounter, setRendererAccidentsCounter] = useState<
@@ -56,4 +56,4 @@ const mainApp: React.FC<mainAppProps> = () => {
   );
 };
 
-export default mainApp;
+export default Explore;

@@ -1,5 +1,5 @@
 import React from "react";
-import { Providers } from "./navigationsAndProviders/Providers";
+import { Providers } from "./routesAndProviders/Providers";
 
 export default function App(): JSX.Element {
   return <Providers />;
