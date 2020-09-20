@@ -15,6 +15,7 @@ const AppTabs: React.FC<AppTabsProps> = () => {
   return (
     <NavigationContainer>
       <Tabs.Navigator
+        initialRouteName={"Explore"}
         screenOptions={({ route }) => ({
           tabBarIcon: ({ focused, color, size }) => {
             let iconName = "ios-information-circle";

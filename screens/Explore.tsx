@@ -51,7 +51,11 @@ const Explore: React.FC<ExploreProps> = () => {
           );
         })}
       </View>
-      <Button title="Show more accidents" onPress={showMoreAccidents} />
+      <Button
+        color={"lightblue"}
+        title="Show more accidents"
+        onPress={showMoreAccidents}
+      />
     </View>
   );
 };

@@ -1,12 +1,10 @@
-import React from 'react'
-import { View } from 'react-native'
+import React from "react";
+import { View } from "react-native";
 
-interface BlockProps { }
+interface BlockProps {}
 
-export const Block: React.FC<BlockProps> = ({children}) => {
-    return (
-        <View>
-            {children}
-        </View>
-    );
-}
+const Block: React.FC<BlockProps> = ({ children }) => {
+  return <View>{children}</View>;
+};
+
+export default Block;
