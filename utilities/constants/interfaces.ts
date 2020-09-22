@@ -5,15 +5,15 @@ export interface apiData {
 }
 
 export interface filters {
-  typ: string | null;
-  nr_drogi: string | null;
-  woj: string | null;
-  droga_zamknieta: boolean | null;
+  typ: string[];
+  nr_drogi: string[];
+  woj: string[];
+  droga_zamknieta: string[];
 }
 
 export interface userFilters {
   isLoading: boolean;
-  content: filters | null;
+  content: filters;
 }
 
 export interface xmlObject {

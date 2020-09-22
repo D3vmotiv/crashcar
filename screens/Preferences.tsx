@@ -1,6 +1,8 @@
-import React from "react";
+import React, { useContext, useEffect } from "react";
 import { Button, ScrollView, Text, View } from "react-native";
 import { Switch } from "../components/";
+import { AppStorage } from "../routesAndProviders/APIprovider";
+import { setUserFilters } from "../utilities/functions";
 
 interface PreferencesProps {}
 
@@ -31,13 +33,24 @@ enum glowne_drogi {
 }
 
 const Preferences: React.FC<PreferencesProps> = () => {
-  const wojewodztwa_all = Object.values(wojewodztwa);
-  const drogi_all = Object.values(glowne_drogi);
+  const wojewodztwa_all = Object.keys(wojewodztwa);
+  const drogi_all = Object.keys(glowne_drogi);
+  const { handleUserFilters, changeFilter } = useContext(AppStorage);
+
+  setUserFilters("FILTERS", handleUserFilters);
+
+  // useEffect(() => {
+  //   console.log("DX");
+  //   return () => {
+  //     console.log("XD");
+  //     setUserFilters("FILTERS", handleUserFilters);
+  //   };
+  // }, [handleUserFilters]);
 
   return (
     <View>
       <Text>Filtry:</Text>
-      <Text>Wyczyść wszystko: </Text>
+      <Text>Zaznacz wszystko: </Text>
       <Button
         color={"lightblue"}
         title={"Clear all"}
@@ -47,12 +60,17 @@ const Preferences: React.FC<PreferencesProps> = () => {
         Wybierz, z których województw chcesz widzieć informacje:{" "}
       </Text>
       <ScrollView horizontal={true}>
-        <Switch activeColor={"lightblue"} initialState={true}>
-          Wszystkie
-        </Switch>
-        {wojewodztwa_all.map((e) => {
+        {/* <Switch activeColor={"lightblue"}>Wszystkie</Switch> */}
+        {wojewodztwa_all.map((e, i) => {
           return (
-            <Switch activeColor={"lightblue"} initialState={true}>
+            <Switch
+              key={i}
+              activeColor={"lightblue"}
+              arrayName={"woj"}
+              arrayToChange={handleUserFilters.content.woj}
+              valueToChange={e}
+              methodToChangeVal={changeFilter}
+            >
               {e}
             </Switch>
           );
@@ -61,17 +79,30 @@ const Preferences: React.FC<PreferencesProps> = () => {
       <Text style={{ marginTop: 16 }}>
         Czy chcesz widzieć informacje tylko o zamkniętych drogach?{" "}
       </Text>
-      <Switch activeColor={"lightblue"}>Tak</Switch>
+      <Switch
+        activeColor={"lightblue"}
+        arrayName={"droga_zamknieta"}
+        arrayToChange={handleUserFilters.content.droga_zamknieta}
+        valueToChange={"droga_zamknieta"}
+        methodToChangeVal={changeFilter}
+      >
+        Tak
+      </Switch>
       <Text style={{ marginTop: 16 }}>
         Wybierz, z których dróg chcesz widzieć informacje:{" "}
       </Text>
       <ScrollView horizontal={true}>
-        <Switch activeColor={"lightblue"} initialState={true}>
-          Wszystkie
-        </Switch>
-        {drogi_all.map((e) => {
+        {/* <Switch activeColor={"lightblue"}>Wszystkie</Switch> */}
+        {drogi_all.map((e, i) => {
           return (
-            <Switch activeColor={"lightblue"} initialState={true}>
+            <Switch
+              key={i}
+              activeColor={"lightblue"}
+              arrayName={"nr_drogi"}
+              arrayToChange={handleUserFilters.content.nr_drogi}
+              valueToChange={e}
+              methodToChangeVal={changeFilter}
+            >
               {e}
             </Switch>
           );

@@ -3,15 +3,15 @@ import { AsyncStorage } from "react-native";
 import { filters, userFilters } from "../constants/interfaces";
 
 const emptyFilters = {
-  droga_zamknieta: null,
-  nr_drogi: null,
-  typ: null,
-  woj: null,
+  droga_zamknieta: [],
+  nr_drogi: [],
+  typ: [],
+  woj: [],
 };
 
 export default (storageItemName: string): userFilters => {
   const [isLoading, setIsLoading] = useState<boolean>(true);
-  let userFilters: filters = emptyFilters;
+  const [userFilters, setUserFilters] = useState<filters>(emptyFilters);
 
   // Get data from async storage
   const getStorageData = async () => {
@@ -20,21 +20,23 @@ export default (storageItemName: string): userFilters => {
     );
     if (filtersFromStorage != null) {
       const filtersObject: filters = JSON.parse(filtersFromStorage);
-      userFilters = filtersObject;
+      setUserFilters(filtersObject);
     }
   };
 
   // Run asynchronous
   useEffect(() => {
-    getStorageData()
-      .then(() => {
-        setIsLoading(false);
-      })
-      .catch(() => {
-        userFilters = emptyFilters;
-        setIsLoading(false);
-      });
-  });
+    if (isLoading) {
+      getStorageData()
+        .then(() => {
+          setIsLoading(false);
+        })
+        .catch(() => {
+          console.log("catch");
+          setIsLoading(false);
+        });
+    }
+  }, [storageItemName]);
 
   return {
     isLoading: isLoading,

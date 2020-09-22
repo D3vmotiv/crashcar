@@ -3,6 +3,7 @@ import {
   xmlObject,
   userFilters,
   apiData,
+  filters,
 } from "../utilities/constants/interfaces";
 import {
   getApiData,
@@ -12,11 +13,22 @@ import {
 
 interface APIproviderProps {}
 
+// Filters
+type singleFilter = keyof filters;
+
+const empyUserFiltersContent: filters = {
+  typ: [],
+  nr_drogi: [],
+  woj: [],
+  droga_zamknieta: [],
+};
+
 // Storage information about apiData, user's preferences filters and state of loading
 export const AppStorage = createContext<{
   handleDataApi: xmlObject;
   handleUserFilters: userFilters;
   isAppLoading: boolean;
+  changeFilter: (filter: singleFilter, val: string[]) => void;
 }>({
   handleDataApi: {
     isLoading: true,
@@ -25,9 +37,10 @@ export const AppStorage = createContext<{
   },
   handleUserFilters: {
     isLoading: true,
-    content: null,
+    content: empyUserFiltersContent,
   },
   isAppLoading: true,
+  changeFilter: (filter: singleFilter, val: string[]) => {},
 });
 
 export const APIprovider: React.FC<APIproviderProps> = ({ children }) => {
@@ -42,7 +55,7 @@ export const APIprovider: React.FC<APIproviderProps> = ({ children }) => {
   });
   const [handleUserFilters, setHandleUserFilters] = useState<userFilters>({
     isLoading: true,
-    content: null,
+    content: empyUserFiltersContent,
   });
 
   // ----------------------------------------
@@ -80,11 +93,32 @@ export const APIprovider: React.FC<APIproviderProps> = ({ children }) => {
       }
 
       // All data loaded
-      if (!handleDataApi.isLoading && !rawDataFromApi.isLoading) {
-        setHandleUserFilters(filtersFromStorage);
+      if (
+        !handleDataApi.isLoading &&
+        !rawDataFromApi.isLoading &&
+        !filtersFromStorage.isLoading
+      ) {
+        if (!filtersFromStorage.isLoading) {
+          setHandleUserFilters(filtersFromStorage);
+        }
         setIsAppLoading(false);
       }
     }
+  };
+
+  // Function to change filters
+  const changeFilter = (filter: singleFilter, val: string[]) => {
+    setHandleUserFilters(
+      (prev): userFilters => {
+        return {
+          content: {
+            ...prev.content,
+            [filter]: val,
+          },
+          isLoading: prev.isLoading,
+        };
+      }
+    );
   };
 
   // Load all data
@@ -98,6 +132,7 @@ export const APIprovider: React.FC<APIproviderProps> = ({ children }) => {
         handleDataApi,
         handleUserFilters,
         isAppLoading,
+        changeFilter,
       }}
     >
       {children}

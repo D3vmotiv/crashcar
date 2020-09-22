@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   View,
   StyleSheet,
@@ -6,6 +6,11 @@ import {
   TouchableOpacity,
   Text,
 } from "react-native";
+import { filters } from "../utilities/constants/interfaces";
+import { setUserFilters } from "../utilities/functions";
+
+// Filters
+type singleFilter = keyof filters;
 
 interface SwitchProps {
   width?: number;
@@ -14,7 +19,10 @@ interface SwitchProps {
   textColor?: string;
   textSize?: number;
   borderColor?: string;
-  initialState?: boolean;
+  arrayName: singleFilter;
+  arrayToChange: string[];
+  valueToChange: string;
+  methodToChangeVal: (filter: singleFilter, val: string[]) => void;
 }
 
 interface Style {
@@ -28,16 +36,43 @@ const Switch: React.FC<SwitchProps> = ({
   textColor,
   textSize,
   borderColor,
-  initialState,
+  arrayName,
+  arrayToChange,
+  valueToChange,
+  methodToChangeVal,
   children,
 }) => {
-  const handleOnPress = () => {
-    setIsActive((prev) => !prev);
+  let arrayCopy = arrayToChange;
+
+  useEffect(() => {
+    changeState();
+  }, [arrayToChange]);
+
+  const changeState = () => {
+    if (arrayToChange.includes(valueToChange)) {
+      setIsActive(true);
+    } else {
+      setIsActive(false);
+    }
   };
 
   const [isActive, setIsActive] = useState<boolean>(
-    initialState ? initialState : false
+    arrayToChange.includes(valueToChange) ? true : false
   );
+
+  const handleOnPress = (): void => {
+    if (isActive) {
+      if (arrayToChange.includes(valueToChange)) {
+        arrayCopy = arrayCopy.filter((e) => e != valueToChange);
+      }
+    } else {
+      if (!arrayToChange.includes(valueToChange)) {
+        arrayCopy.push(valueToChange);
+      }
+    }
+    changeState();
+    methodToChangeVal(arrayName, arrayCopy);
+  };
 
   return (
     <View

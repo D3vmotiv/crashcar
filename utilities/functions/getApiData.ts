@@ -17,25 +17,27 @@ export default (url: string): apiData => {
     };
 
     // Asynchronous request to API
-    makeRequest()
-      .then((r) => {
-        setData((prev) => {
-          return {
-            ...prev,
-            isLoading: false,
-            content: r,
-          };
+    if (data.isLoading) {
+      makeRequest()
+        .then((r) => {
+          setData((prev) => {
+            return {
+              ...prev,
+              isLoading: false,
+              content: r,
+            };
+          });
+        })
+        .catch((err) => {
+          setData((prev) => {
+            return {
+              ...prev,
+              isLoading: false,
+              error: err,
+            };
+          });
         });
-      })
-      .catch((err) => {
-        setData((prev) => {
-          return {
-            ...prev,
-            isLoading: false,
-            error: err,
-          };
-        });
-      });
+    }
   }, [url]);
 
   return data;
